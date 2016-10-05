@@ -11,7 +11,7 @@ int getRows(const char* fileName) {
 	ifstream file;
 	file.open(fileName);
 	
-	for (!file.eof()) {
+	while (!file.eof()) {
 		if (file.get() == '\n') rowCount++;
 	}
 	
@@ -29,15 +29,13 @@ int getCellWidth (const char* fileName) {
 	ifstream file;
 	file.open(fileName);
 	
-	
-	
 	while (!file.eof()) {
 		getline(file,line,'\n');
 		dataArray[pointer] = line;
 		pointer++;
-		
 	}
-	cout <<dataPoints<<endl;
+	
+	cout << pointer << endl;
 	
 	return 0;
 }
@@ -48,13 +46,13 @@ int readIn (const char* fileName) {
 	ifstream file;
 	file.open(fileName);
 	
-	int cellWidth = cellCountAtWidest(fileName);
+	int cellWidth = getCellWidth(fileName);
 	
 	return 0;
 }
 
 
-main() {
+int main() {
 	readIn("inpfile.csv");
-	
+	return 0;
 }
