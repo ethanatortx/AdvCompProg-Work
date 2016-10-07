@@ -54,18 +54,39 @@ vector<vector<string> > readInData(const char* fileName) {
 	return data;
 }
 
-void readOutData(vector<vector<string> > vec) {
+/*string searchFor(vector<vector<string> > vec, const char* keyword) {
 	for (int outside = 0; outside < vec.size(); outside++) {
 		vector<string> tempElement = vec[outside];
 		for (int inside = 0; inside < tempElement.size(); inside++) {
-			cout << tempElement[inside] << endl;
+			if (tempElement[inside] == keyword) return ('' + outside + ' ' + inside);
 		}
+	}
+}*/
+
+void writeData(const char* title, const vector<vector<string> > &data) {
+	ofstream file;
+	file.open(title);
+	
+	for (int outside = 0; outside < data.size(); outside++) {
+		vector<string> tempElement = data[outside];
+		for (int inside = 0; inside < tempElement.size(); inside++) {
+			file << tempElement[inside] + ',';
+		}
+		file << '\n';
 	}
 }
 
+vector<vector<string> > sortLongestLived(const vector<vector<string> > &vec, const string &str) {
+	vector<vector<string> > data = vec;
+	
+	
+	
+	return data;
+}
+
 int main() {
-	cout << rowCount("inpfile.csv") << endl;
 	vector<vector<string> > data = readInData("inpfile.csv");
-	readOutData(data);
+	writeData("newcsv.csv", data);
+	//cout << searchFor(data,"2000-2005");
 	return 0;
 }
