@@ -49,6 +49,21 @@ vector<vector<string> > readInData(const char* fileName) {
 		}
 	}
 	
+	for (int outside = 0; outside < data.size(); outside++) {
+		vector<string> vec = data[outside];
+		for (int inside = 0; inside < data.size(); inside++) {
+			string item = vec[inside];
+			int strLength = sizeof(item)/sizeof(*item);
+			if (item[0] == '"') {
+				while (item[strLength] != '"') {
+					strLength = sizeof(item)/sizeof(*item);
+					item += vec[inside+1];
+					vec.erase(inside+1);
+				}
+			}
+		}
+	}
+	
 	file.close();
 	
 	return data;
@@ -76,17 +91,30 @@ void writeData(const char* title, const vector<vector<string> > &data) {
 	}
 }
 
-vector<vector<string> > sortLongestLived(const vector<vector<string> > &vec, const string &str) {
-	vector<vector<string> > data = vec;
+int searchColumn(const vector<vector<string> > &vec, const char* columnHeader) {
 	
+	int count = -1;
 	
+	vector<string> tempElement;
 	
-	return data;
+	for (int outside = 0; outside < vec.size(); outside++) {
+		tempElement = vec[outside];
+		if (outside == 16) {
+			for (int inside = 0; inside < tempElement.size(); inside++) {
+				count++;
+				string element(tempElement[inside]);
+				if (element == columnHeader) return count;
+			}
+			count = -1;
+		}
+	}
+	return count;
 }
 
 int main() {
 	vector<vector<string> > data = readInData("inpfile.csv");
 	writeData("newcsv.csv", data);
 	//cout << searchFor(data,"2000-2005");
+	cout << searchColumn(data,"2000-2005");
 	return 0;
 }
