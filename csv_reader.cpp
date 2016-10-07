@@ -1,65 +1,71 @@
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <iterator>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-int getRows(const char* fileName) {
-	
-	int rowCount (0);
+vector<string> splitString(const string &str, char delim) {
+	stringstream ss(str);
+	string item;
+	vector<string> data;
+	while (getline(ss,item,delim)) {
+		data.push_back(item);
+	}
+	return data;
+}
+
+
+int rowCount (const char* fileName) {
+	int count = 0;
 	
 	ifstream file;
 	file.open(fileName);
 	
 	while (!file.eof()) {
-		if (file.get() == '\n') rowCount++;
+		if (file.get() == '\n') count++;
 	}
 	
 	file.close();
 	
-	return rowCount;
+	return count;
 }
 
-int getCellWidth (const char* fileName) {
-	
-	int pointer = 0;
-	int rowCount = (getRows(fileName));
+vector<vector<string> > readInData(const char* fileName) {
 	string line;
-	string dataArray[rowCount];
 	
-	cout << rowCount << endl;
+	vector<vector<string> > data;
+	vector<string> temp;
 	
-	cout << sizeof(dataArray)/sizeof(*dataArray)<<endl;
 	ifstream file;
 	file.open(fileName);
 	
 	while (!file.eof()) {
-		getline(file,line,'\n');
-		dataArray[pointer] = line;
-		cout << line << endl;
-		pointer++;
-		//cout << pointer << endl;
+		if (getline(file,line,'\n')) {
+			temp = splitString(line,',');
+			data.push_back(temp);
+		}
 	}
 	
-	cout << pointer << endl;
+	file.close();
 	
-	return 0;
+	return data;
 }
 
-int readIn (const char* fileName) {
-	string line;
-	
-	ifstream file;
-	file.open(fileName);
-	
-	int cellWidth = getCellWidth(fileName);
-	
-	return 0;
+void readOutData(vector<vector<string> > vec) {
+	for (int outside = 0; outside < vec.size(); outside++) {
+		vector<string> tempElement = vec[outside];
+		for (int inside = 0; inside < tempElement.size(); inside++) {
+			cout << tempElement[inside] << endl;
+		}
+	}
 }
-
 
 int main() {
-	readIn("inpfile.csv");
+	cout << rowCount("inpfile.csv") << endl;
+	vector<vector<string> > data = readInData("inpfile.csv");
+	readOutData(data);
 	return 0;
 }
