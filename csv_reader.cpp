@@ -1,12 +1,13 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 int getRows(const char* fileName) {
 	
-	int rowCount = 0;
+	int rowCount (0);
 	
 	ifstream file;
 	file.open(fileName);
@@ -23,16 +24,22 @@ int getRows(const char* fileName) {
 int getCellWidth (const char* fileName) {
 	
 	int pointer = 0;
+	int rowCount = (getRows(fileName));
 	string line;
-	string dataArray[getRows(fileName)];
+	string dataArray[rowCount];
 	
+	cout << rowCount << endl;
+	
+	cout << sizeof(dataArray)/sizeof(*dataArray)<<endl;
 	ifstream file;
 	file.open(fileName);
 	
 	while (!file.eof()) {
 		getline(file,line,'\n');
 		dataArray[pointer] = line;
+		cout << line << endl;
 		pointer++;
+		//cout << pointer << endl;
 	}
 	
 	cout << pointer << endl;
