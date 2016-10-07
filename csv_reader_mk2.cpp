@@ -69,14 +69,19 @@ vector<vector<string> > readInData(const char* fileName) {
 	return data;
 }
 
-void readOutData(vector<vector<string> > &vec) {
-	for (vector<string> iter : vec.capacity()) {
+void readOutData(vector<vector<string> > vec) {
+	for (int outside = 0; outside < vec.size(); outside++) {
+		vector<string> tempElement = vec[outside];
+		for (int inside = 0; inside < tempElement.size(); inside++) {
+			cout << tempElement[inside] << endl;
+		}
 	}
 }
 
 int main() {
 	cout << rowCount("inpfile.csv") << endl;
 	vector<vector<string> > data = readInData("inpfile.csv");
-	vector<string> temp = splitString("hello new friend", ' ');
+	//vector<string> temp = splitString("hello new friend", ' ');
+	readOutData(data);
 	return 0;
 }
