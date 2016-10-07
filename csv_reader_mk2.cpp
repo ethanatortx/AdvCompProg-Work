@@ -4,23 +4,8 @@
 #include <iterator>
 #include <iostream>
 #include <vector>
-#include <typeinfo>
 
 using namespace std;
-
-/*vector<string> splitString(const string str, const char delim) {
-	vector<string> data;
-	istringstream iss(str);
-	int count = 0;
-	while (iss) {
-		string sub;
-		iss >> sub;
-		cout << sub << endl;
-		data.insert(data.begin()+count, "okay");
-	}
-	
-	return data;
-}*/
 
 vector<string> splitString(const string &str, char delim) {
 	stringstream ss(str);
@@ -81,7 +66,6 @@ void readOutData(vector<vector<string> > vec) {
 int main() {
 	cout << rowCount("inpfile.csv") << endl;
 	vector<vector<string> > data = readInData("inpfile.csv");
-	//vector<string> temp = splitString("hello new friend", ' ');
 	readOutData(data);
 	return 0;
 }
