@@ -1,3 +1,10 @@
+
+/*  This program will sort a csv file by high to low or low to high
+	and create a new file called "newcsv" which contains the newly
+	sorted data. It should work for whatever you feed into it, but I
+	only tested it with the given csv file.
+		-Ethan Rivers, Advanced Computer Programming 02 */
+
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -56,12 +63,10 @@ vector<vector<string> > readInData(const char* fileName) {
 			int strLength = item.length()-1;
 			if (item[0] == '"') {
 				while (!(item[strLength] == '"')) {
-					strLength = item.length()-1;
 					item.append("," + vec[inside+1]);
-					//cout << item[strLength] << " " << strLength << endl;
 					vec.erase(vec.begin()+inside+1);
+					strLength = item.length()-1;
 				}
-				//cout << item;
 				vec[inside] = item;
 			}
 		}
@@ -72,15 +77,6 @@ vector<vector<string> > readInData(const char* fileName) {
 	
 	return data;
 }
-
-/*string searchFor(vector<vector<string> > vec, const char* keyword) {
-	for (int outside = 0; outside < vec.size(); outside++) {
-		vector<string> tempElement = vec[outside];
-		for (int inside = 0; inside < tempElement.size(); inside++) {
-			if (tempElement[inside] == keyword) return ('' + outside + ' ' + inside);
-		}
-	}
-}*/
 
 void writeData(const char* title, const vector<vector<string> > &data) {
 	ofstream file;
@@ -141,17 +137,23 @@ vector<vector<string> > sortBy(const string columnHeader, const vector<vector<st
 		double currentPoint = 0;
 		convert >> currentPoint;
 		
-		//cout << currentPoint << '\n';
-		
 		columnReal.push_back(currentPoint);
 		
 		int inside = 0;
 		
 		while (inside < sorted.size()) {
-			if (currentPoint <= sorted[inside]) {
-				inside++;
-			} else if (currentPoint > sorted[inside]) {
-				break;
+			if (config) {
+				if (currentPoint <= sorted[inside]) {
+					inside++;
+				} else if (currentPoint > sorted[inside]) {
+					break;
+				}
+			} else if (!config) {
+				if (currentPoint >= sorted[inside]) {
+					inside++;
+				} else if (currentPoint < sorted[inside]) {
+					break;
+				}
 			}
 		}
 		sorted.insert(sorted.begin()+inside, columnReal[iter]);
@@ -160,47 +162,22 @@ vector<vector<string> > sortBy(const string columnHeader, const vector<vector<st
 		
 	}
 	
-	/*for (int rtg = 0; rtg < sorted.size(); rtg++) {
-		cout << sorted[rtg] << " " << sortingIndex[rtg] << '\n';
-	}*/
-	
 	vector<vector<string> > finalData;
 	
 	int dif = data.size() - sortingIndex.size();
+	int sortIter = 0;
+	int sortedPos;
 	
 	for (int finalIter = 0; finalIter < data.size(); finalIter++) {
-		int discrepancy = finalIter - dif;
-		int elementIndex = sortingIndex[discrepancy];
+		vector<string> tempVec = data[finalIter];
 		if (finalIter > dif) {
-			finalData.push_back(data[elementIndex]);
-			
-		} else {
-			finalData.push_back(data[finalIter]);
-			//cout << '\n';
+			sortedPos = (sortingIndex[sortIter]+dif);
+			finalData.push_back(data[sortedPos]);
+			sortIter++;
+		} else if (finalIter <= dif) {
+			finalData.push_back(tempVec);
 		}
-		/*for (int rtg = 0; rtg < data[finalIter].size(); rtg++) {
-			cout << finalData[finalIter][rtg] << " ";
-		}
-		cout << '\n' << elementIndex << " " << discrepancy << '\n';*/
-	}
-	cout << dif;
-	
-	/*for (int rtg = 0; rtg < finalData.size(); rtg++) {
-		vector<string> tempElementLul = finalData[rtg];
-		for (int rtg2; rtg2 < tempElementLul.size(); rtg2++) {
-			cout << tempElementLul[rtg2] << ' ';
-		}
-		cout << '\n';
-	}*/
-	
-	/*for (int rtg = 0; rtg < data.size(); rtg++) {
-		vector<string> tempElementLul = data[rtg];
-		for (int rtg2; rtg2 < tempElementLul.size(); rtg2++) {
-			cout << tempElementLul[rtg2] << ' ';
-		}
-		cout << '\n';
-	}*/
-	
+	}	
 	return finalData;
 }
 
@@ -208,8 +185,5 @@ int main() {
 	vector<vector<string> > data = readInData("inpfile.csv");
 	vector<vector<string> > sorted = sortBy("\"2000-2005\"",data,true);
 	writeData("newcsv.csv", sorted);
-	//cout << searchFor(data,"2000-2005");
-	vector<int> cell = getCell(data,"\"2000-2005\"");
-	vector<vector<string> > vec = sortBy("\"2000-2005\"", data, true);
 	return 0;
 }
