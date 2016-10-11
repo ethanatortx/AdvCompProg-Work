@@ -158,8 +158,6 @@ vector<vector<string> > sortBy(const string columnHeader, const vector<vector<st
 		}
 		sorted.insert(sorted.begin()+inside, columnReal[iter]);
 		sortingIndex.insert(sortingIndex.begin()+inside, iter);
-		
-		
 	}
 	
 	vector<vector<string> > finalData;
@@ -184,6 +182,6 @@ vector<vector<string> > sortBy(const string columnHeader, const vector<vector<st
 int main() {
 	vector<vector<string> > data = readInData("inpfile.csv");
 	vector<vector<string> > sorted = sortBy("\"2000-2005\"",data,true);
-	writeData("newcsv.csv", sorted);
+	writeData("testcase_sorted.csv", sorted);
 	return 0;
 }
