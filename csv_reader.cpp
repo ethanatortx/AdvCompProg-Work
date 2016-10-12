@@ -45,17 +45,17 @@ vector<vector<string> > readInData(const char* fileName) {
 	
 	vector<vector<string> > data;
 	vector<string> temp;
-	
+
 	ifstream file;
 	file.open(fileName);
-	
+
 	while (!file.eof()) {
 		if (getline(file,line,'\n')) {
 			temp = splitString(line,',');
 			data.push_back(temp);
 		}
 	}
-	
+
 	for (int outside = 0; outside < data.size(); outside++) {
 		vector<string> vec = data[outside];
 		for (int inside = 0; inside < vec.size(); inside++) {
@@ -180,8 +180,33 @@ vector<vector<string> > sortBy(const string columnHeader, const vector<vector<st
 }
 
 int main() {
-	vector<vector<string> > data = readInData("inpfile.csv");
-	vector<vector<string> > sorted = sortBy("\"2000-2005\"",data,true);
-	writeData("testcase_sorted.csv", sorted);
+	string temp1;
+	string temp2;
+	string temp3;
+	string columnHeader;
+	bool config = true;
+	cout << "Input file name: ";
+	cin >> temp1;
+	const char* fileName = temp1.c_str();
+	cout << "\nOutput file name: ";
+	cin >> temp2;
+	const char* outputFileName = temp2.c_str();
+	cout << "\nColumn header to sort by: ";
+	cin >> columnHeader;
+	cout << "\nSort ascending or descending (ascending : y/descending : n): ";
+	cin >> temp3;
+	
+	if (temp3 == "y") {
+		config = true;
+	} else if (temp3 == "n") {
+		config = false;
+	}
+
+	vector<vector<string> > data = readInData(fileName);
+	vector<vector<string> > sorted = sortBy(columnHeader,data,config);
+	writeData(outputFileName, sorted);
+
+	cout << "Sorted file " << fileName << " under column " << columnHeader << '\n';
+	cout << "Output file under " << outputFileName << '\n';
 	return 0;
 }
