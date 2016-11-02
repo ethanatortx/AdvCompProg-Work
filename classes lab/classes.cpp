@@ -59,7 +59,7 @@ int main()
 			salesArr[c].units = atoi(cNum);
 			infile.getline(cNum, 256);
 			salesArr[c].unitCost = atof(cNum);
-			salesArr[c].Total = atof(cNum);
+			salesArr[c].Total = 
 
 			i++ ;
 			c++;

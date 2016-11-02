@@ -119,7 +119,7 @@ void simpleSortTotal(SALESREC* s[], int c)
       if (s[i]->Total() < s[j]->Total()) {
         temp = s[i];
         s[i] = s[j];
-        s[j] = temp;
+        s[j] = s[i];
       }
   delete temp;
 }
