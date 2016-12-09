@@ -1,10 +1,12 @@
-
+// I dont think that the operator overload functions are needed for this program.
+// It works fine without it, and I cant see a time where the operator overload functions would be useful.
+// I dont even know what the operator overloads are supposed to do?
+// What are we iterating? What are we dereferencing? I have no idea.
 
 #include <iostream>
 #include <stdexcept>
 
 class linkedList { // initialize linked list class
-	friend class iterator;
 	class Node {
 	public:
 		// initialize variables essential to node and linked list structure
@@ -19,6 +21,7 @@ class linkedList { // initialize linked list class
 			prev = n;
 		};
 	};
+
 public:
 	linkedList() { // default constructor
 		head = NULL;
@@ -248,41 +251,25 @@ private:
 		return node;
 	}
 
+	// returns all values in the linked list as an array of integer values
+	int returnAll() {
+		Node* node = head;
+
+		int valArr[this->size()];
+
+		for (int i = 0; i < this->size(); ++i) {
+			valArr[i] = node->value;
+			std::cout << "test" << valArr[i] << std::endl;
+
+			node = node->next;
+		}
+		return *valArr;
+	};
+
 	// default initializers for iterator class
 	Node* head; // first node in list
 	Node* tail; // last node in list
 	unsigned int length; // length of list
-};
-
-class iterator {
-	friend class linkedList;
-public:
-
-	int position;
-
-	// default constructor
-	iterator() {
-		begin();
-	}
-
-	// set position of to beginning of list
-	void begin(){
-		position = 0;
-	};
-
-	// increment position by one
-	void operator++(){
-		position += 1;
-	};
-
-	// decrement position by one
-	void operator--(){
-		position -= 1;
-	};
-
-	// return value of node at current position
-	int operator*(linkedList list){
-	};
 };
 
 int main() {
