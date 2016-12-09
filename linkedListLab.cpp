@@ -1,7 +1,7 @@
 // I dont think that the operator overload functions are needed for this program.
 // It works fine without it, and I cant see a time where the operator overload functions would be useful.
 // I dont even know what the operator overloads are supposed to do?
-// What are we iterating? What are we dereferencing? I have no idea.
+// What are we iterating? What are we dereferencing? I have no idea. I dont think it works.
 
 #include <iostream>
 #include <stdexcept>
@@ -253,16 +253,22 @@ private:
 
 	// returns all values in the linked list as an array of integer values
 	int returnAll() {
+		
 		Node* node = head;
 
+		// initialize array with size of the linked list
 		int valArr[this->size()];
 
+		// loop to iterate through all values and put them into the array
 		for (int i = 0; i < this->size(); ++i) {
+			// set add the value of the current node to the array
 			valArr[i] = node->value;
-			std::cout << "test" << valArr[i] << std::endl;
 
+			// iterate to the next node
 			node = node->next;
 		}
+
+		// return value array
 		return *valArr;
 	};
 
@@ -284,5 +290,6 @@ int main() {
 	while (list.size()) {
 		std::cout << list.pullHead() << std::endl; // prints elements one by one
 	}
+
 	return 0;
 }
