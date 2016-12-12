@@ -149,12 +149,17 @@ public:
 	}
 
 	void setNode(node* node, int value) { // set the value of a specific node that already exists
+
+		// loop through nodes
 		for (int i = 0; i < nodes.size(); ++i) {
-			if(&nodes[i] == node) {
-				nodes[i].setValue(value);
+			if(&nodes[i] == node) { // compare current node with provided node
+				nodes[i].setValue(value); // assign value of node within graph
 				break;
 			}
 		}
+
+		std::string error("Node does not exist");
+		throw std::domain_error(std::string(error));
 	}
 
 	int getSize() { // return the size of the graph
