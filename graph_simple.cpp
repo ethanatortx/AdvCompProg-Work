@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <utility>
 
+// simple graph class constructor
 class graph {
 public:
 	class node {
@@ -48,9 +49,9 @@ public:
 		keys: std vector of shared smart pointers that serve as the keys to be added to the map in its initialization
 	  values: vector of <vector of shared smart pointers> that are the values to be paired with the keys at the same index
 	*/
-	graph(std::vector<node> keys, std::vector<std::vector<std::shared_ptr<node>>> values) {
-		size = keys.size();
-		for (int i = 0; i < size; i++) {
+	graph(std::vector<std::shared_ptr<node>> keys, std::vector<std::vector<std::shared_ptr<node>>> values) {
+		size = keys.size(); // set graph size to the size of the provided keys vector
+		for (int i = 0; i < size; i++) { // emplace each node within the map as a key with its coresponding vector value
 			nodes.emplace(keys[i], values[i]);
 		}
 	};
@@ -73,9 +74,13 @@ public:
 
 	// create a node from supplied value and insert it into graph
 	void createNode(double val, std::vector<std::shared_ptr<node>> nvec) {
-		std::shared_ptr<node> n (new node(val)); // create new node with value: (val)
-		std::pair<std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator, bool> p = (nodes.emplace(n, nvec));
+		// create new node with value: (val)
+		std::shared_ptr<node> n (new node(val)); 
+		// emplace value and retrieve pair <iterator ref, fail:succeed>
+		std::pair<std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator, bool> p = (nodes.emplace(n, nvec)); 
+		// if emplacement fails, throw an error stating that the node already exists within the graph
 		if (!(p.second)) { std::string error("Node already in nodes map"); throw std::domain_error(std::string(error)); }
+		// add refences to this node within the map
 		fixReferences(p.first);
 	};
 
@@ -128,8 +133,13 @@ private:
 		std::shared_ptr<node> n = it->first;
 		std::vector<std::shared_ptr<node>> ref = it->second;
 
-		for(std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator i; i != nodes.end(); i++) {
-
+		for(std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator outside; outside != nodes.end(); outside++) {
+			for (std::vector<std::shared_ptr<node> >::iterator inside = ref.begin(); inside != ref.end(); outside++) {
+				
+				if (inside == n) {
+					nodes[outside]->push_back(n);
+				}
+			}
 		}
 	}
 };
