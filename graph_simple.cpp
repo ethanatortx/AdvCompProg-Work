@@ -19,6 +19,10 @@ public:
 			value = 0;
 		}
 
+		node(double val) {
+			value = val;
+		};
+
 		// destructor
 		~node() {
 			value = 0;
@@ -35,18 +39,44 @@ public:
 		};
 	};
 
+	// default constructor
 	graph() {
 		size = 0;
 	};
 
-	~graph() {
-		
+	/* constructor elements
+		keys: std vector of shared smart pointers that serve as the keys to be added to the map in its initialization
+	  values: vector of <vector of shared smart pointers> that are the values to be paired with the keys at the same index
+	*/
+	graph(std::vector<node> keys, std::vector<std::vector<std::shared_ptr<node>>> values) {
+		size = keys.size();
+		for (int i = 0; i < size; i++) {
+			nodes.emplace(keys[i], values[i]);
+		}
 	};
 
-	// opeartor overload of accessor, return value at index
+	// destructor; not done
+	~graph() {
+
+	};
+
+	// operator overload of accessor, return value at index
 	double operator[] (unsigned int index) {
-		std::shared_ptr<node> n = getKey(index);
-		return n->getValue();
+		std::shared_ptr<node> n = getKey(index); // get key node at position: (index)
+		return n->getValue(); // return the value of the key node at position: (index)
+	};
+
+	// insert provided node into graph
+	void addNode(std::shared_ptr<node> n, std::vector< std::shared_ptr<node> > nvec) {
+		nodes.emplace(n, nvec); // insert node into nodes map
+	};
+
+	// create a node from supplied value and insert it into graph
+	void createNode(double val, std::vector<std::shared_ptr<node>> nvec) {
+		std::shared_ptr<node> n (new node(val)); // create new node with value: (val)
+		std::pair<std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator, bool> p = (nodes.emplace(n, nvec));
+		if (!(p.second)) { std::string error("Node already in nodes map"); throw std::domain_error(std::string(error)); }
+		fixReferences(p.first);
 	};
 
 	// return all values of nodes in vector form
@@ -76,15 +106,32 @@ public:
 	};
 
 protected:
+
+	/* map of nodes in graph
+		<key: smart pointer to a specific node (essentially a node),
+	   value: vector of smart pointers referencing other nodes (essentially the edges of node: (key))> */
 	std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > > nodes;
+	// size of graph (amount of active nodes)
 	unsigned int size;
 
+private:
 	// return the key at a certain index
 	std::shared_ptr<node> getKey(unsigned int index) {
-		std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator it = nodes.begin();
-		do { it++; index--; } while(index>0);
-		return it->first;
+		// create iterator
+		std::map<std::shared_ptr<node>, std::vector< std::shared_ptr<node> >>::iterator it = nodes.begin();
+		do { it++; index--; } while(index>0); // reapeat (steps) amount of times, incrementing the iterator
+		return it->first; // return the key at position (it)
 	};
+
+	// fix references to a node
+	void fixReferences(std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator it) { // param it: iterator at position of node to fix
+		std::shared_ptr<node> n = it->first;
+		std::vector<std::shared_ptr<node>> ref = it->second;
+
+		for(std::map< std::shared_ptr<node>, std::vector< std::shared_ptr<node> > >::iterator i; i != nodes.end(); i++) {
+
+		}
+	}
 };
 
 int main() {
