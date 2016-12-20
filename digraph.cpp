@@ -1,121 +1,124 @@
+// digraph
 
-
-#include <utility>
-#include <memory>
+#include <iostream>
 #include <vector>
 #include <map>
-#include <iostream>
+#include <utility>
+#include <memory>
 
 template <class T>
 class digraph {
+
 private:
-	// define edges as a type
+	// edge
 	typedef std::pair<std::shared_ptr<T>, bool> edge;
-	// define map of nodes as a type
-	typedef std::map<T, std::vector<typename digraph::edge>> nodeMap;
-	// construct map to hold stored nodes
-	typename digraph::nodeMap nodes;
+	// node map
+	typedef std::map<std::shared_ptr<T>, std::vector<typename digraph::edge>> nodemap;
+	// declare nodes map
+	typename digraph::nodemap nodes;
 
 public:
 	// default constructor
 	digraph();
-
-	// constructor with pre-defined map of nodes
-	digraph(typename digraph::nodeMap);
-
+	// construct from provided map
+	digraph(typename digraph::nodemap);
 	// destructor
 	~digraph();
-
-	// return the size of the graph
-	int size();
-
-	// returns true if graph is empty
+	// return whether or not graph contains any nodes
 	bool empty();
-
-	// return vector of iterators pointing to nodes with value
-	std::vector<typename digraph::nodeMap::iterator> at(T);
-
-	// push a node to the graph
-	std::pair<typename digraph::nodeMap::iterator, bool> push(T, std::vector<typename digraph::edge>);
-
-	// erase at specific iterator and return T
-	T erase(typename digraph::nodeMap::iterator);
-
-	// erase all nodes and return their values in a range
-	std::vector<T> erase_r(typename digraph::nodeMap::iterator, typename digraph::nodeMap::iterator);
-	
-	// erase all with a certain value of T, return the count of how many erased
+	// return count of nodes in graph
+	int size();
+	// add an edge to a node
+	void add_edge(std::shared_ptr<T>, typename digraph::edge);
+	// insert node
+	typename digraph::nodemap::iterator push(std::shared_ptr<T>, std::vector<typename digraph::edge>);
+	// insert multiple nodes
+	std::vector<typename digraph::nodemap::iterator> push_mult(std::vector<std::pair<std::shared_ptr<T>, std::vector<typename digraph::edge>>>);
+	// create and insert node
+	typename digraph::nodemap::iterator emplace(T, std::vector<typename digraph::edge>);
+	// create and insert multiple nodes
+	std::vector<typename digraph::nodemap::iterator> emplace_mult(std::vector<std::pair<T, std::vector<typename digraph::edge>>>);
+	// erase node (pointer)
+	void erase(std::shared_ptr<T>);
+	// erase node (iterator)
+	void erase(typename digraph::nodemap::iterator);
+	// erase node and return its value (pointer)
+	T pull(std::shared_ptr<T>);
+	// erase node and return its value (iterator)
+	T pull(typename digraph::nodemap::iterator);
+	// erase all nodes in the provided vector
+	void erase_v(std::vector<std::shared_ptr<T>>);
+	// erase all nodes in a range
+	void erase_r(typename digraph::nodemap::iterator, typename digraph::nodemap::iterator);
+	// erase all nodes in the provided vector and return their values
+	std::vector<T> pull_v(std::vector<std::shared_ptr<T>>);
+	// erase all nodes in a range and return their values
+	std::vector<T> pull_r(typename digraph::nodemap::iterator, typename digraph::nodemap::iterator);
+	// erase all nodes with value and return count of nodes erased
 	int erase_a(T);
+	// print out all nodes' values and their edges
+	void printall();
 };
 
-// default class constructor
 template <class T>
-digraph<T>::digraph() {
-	digraph<T>::nodes = new digraph<T>::nodeMap;
-};
+digraph<T>::digraph() {};
 
-// class constructor with provided node map
 template <class T>
-digraph<T>::digraph(typename digraph<T>::nodeMap nm) {
-	// dynamically allocate new node map
-	&digraph<T>::nodes = new std::shared_ptr<digraph<T>::nodeMap>
+digraph<T>::digraph(typename digraph<T>::nodemap nmap) {};
 
-	// create iterator to loop through the map
-	typename digraph<T>::nodeMap::iterator it = nm.start();
-
-	// emplace key/value pairs from the provided map into the digraphs map
-	for (; it != nm.end(); it++) {
-		digraph<T>::nodes.emplace((*it).first,(*it).second);
-	}
-};
-
-// class destructor
 template <class T>
-digraph<T>::~digraph() {
+digraph<T>::~digraph() {};
 
-};
-
-// return the amount of nodes in the graph
 template <class T>
-int digraph<T>::size() {
+bool digraph<T>::empty() {};
 
-};
-
-// check if empty (empty:not empty ? true:false)
 template <class T>
-bool digraph<T>::empty() {
+int digraph<T>::size() {};
 
-};
-
-// get vector of iterators pointing to each node with provided value
 template <class T>
-std::vector<typename digraph<T>::nodeMap::iterator> digraph<T>::at(T val) {
+void digraph<T>::add_edge(std::shared_ptr<T> n, typename digraph<T>::edge e) {};
 
-};
-
-// push a node into the graph
 template <class T>
-std::pair<typename digraph<T>::nodeMap::iterator, bool> push(T n, std::vector<typename digraph<T>::edge> evec) {
+typename digraph<T>::nodemap::iterator digraph<T>::push(std::shared_ptr<T> n, std::vector<typename digraph<T>::edge> evec) {};
 
-};
-
-// erase a node a specific iterator position and return its value
 template <class T>
-T digraph<T>::erase(typename digraph<T>::nodeMap::iterator pos) {
+std::vector<typename digraph<T>::nodemap::iterator> digraph<T>::push_mult(std::vector<std::pair<std::shared_ptr<T>, std::vector<typename digraph<T>::edge>>> nvec) {};
 
-};
-
-// erase nodes in a range and return their values
 template <class T>
-std::vector<T> digraph<T>::erase_r(typename digraph<T>::nodeMap::iterator start, typename digraph<T>::nodeMap::iterator end) {
+typename digraph<T>::nodemap::iterator digraph<T>::emplace(T val, std::vector<typename digraph<T>::edge> evec) {};
 
-};
-
-// erase all nodes with a certain value and return the amount of total nodes erased
 template <class T>
-int digraph<T>::erase_a(T val) {
+std::vector<typename digraph<T>::nodemap::iterator> digraph<T>::emplace_mult(std::vector<std::pair<T, std::vector<typename digraph<T>::edge>>> nvec) {};
 
-};
+template <class T>
+void digraph<T>::erase(std::shared_ptr<T> n) {};
+
+template <class T>
+void digraph<T>::erase(typename digraph<T>::nodemap::iterator n) {};
+
+template <class T>
+T digraph<T>::pull(std::shared_ptr<T> n) {};
+
+template <class T>
+T digraph<T>::pull(typename digraph<T>::nodemap::iterator n) {};
+
+template <class T>
+void digraph<T>::erase_v(std::vector<std::shared_ptr<T>> nvec) {};
+
+template <class T>
+void digraph<T>::erase_r(typename digraph<T>::nodemap::iterator start, typename digraph<T>::nodemap::iterator end) {};
+
+template <class T>
+int digraph<T>::erase_a(T val) {};
+
+template <class T>
+std::vector<T> digraph<T>::pull_v(std::vector<std::shared_ptr<T>> nvec) {};
+
+template <class T>
+std::vector<T> digraph<T>::pull_r(typename digraph<T>::nodemap::iterator start, typename digraph<T>::nodemap::iterator end) {};
+
+template <class T>
+void digraph<T>::printall() {};
 
 int main() {
 	return 0;
