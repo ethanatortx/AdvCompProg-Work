@@ -3,26 +3,31 @@
 
 #include <iterator>
 
+// circular linked list
 template <class T>
 class LinkedList {
+	// node structure
 	struct Node {
-		Node(T x, Node* y): data(d), next(y) {}
+		Node(T x, Node* y = 0): data(x), next(y) {}
+		// data of this node
 		T data;
+		// node in next position
 		Node* next;
-	}
+	};
+	// node at tail end of list
 	Node* tail;
-	int size;
 
 public:
-	LinkedList(): tail(0), size(0) {}
-	LinkedList(const LinkedList& x): tail(x.tail), size(x.size) {}
-
+	// iterator
 	class iterator: public std::iterator<std::forward_iterator_tag, T> 
 	{
-		friend class LinkedList;
-		friend class const_iterator;
+		// node this iterator is referencing
 		Node* ref;
 	public:
+		friend class LinkedList;
+		friend class const_iterator;
+
+		// type definitions
 		typedef T value_type;
 		typedef T& reference;
 		typedef T* pointer;
@@ -34,18 +39,22 @@ public:
 		inline iterator& operator=(const iterator& it) { this->ref = it.ref; return *this; }
 		inline iterator& operator++() { this->ref = this->ref->next; return *this; }
 		inline iterator operator++(int) { iterator it(*this); this->ref = this->ref->next; return it; }
-		inline typename reference operator*() const { return this->ref->next->data; }
-		inline typename pointer operator->() const { return this->ref->next; }
-		inline bool operator==(const LinkedList& x) const { return this->ref == x.ref; }
-		inline bool operator!=(const LinkedList& x) const { return this->ref != x.ref; }
-	}
+		inline typename LinkedList<T>::iterator::reference operator*() const { return this->ref->next->data; }
+		inline typename LinkedList<T>::iterator::pointer operator->() const { return this->ref->next; }
+		inline bool operator==(const iterator& x) const { return this->ref == x.ref; }
+		inline bool operator!=(const iterator& x) const { return this->ref != x.ref; }
+	};
 
+	// constant iterator
 	class const_iterator: public std::iterator<std::forward_iterator_tag, T>
 	{
-		friend class LinkedList;
-		friend class iterator;
+		// node this iterator is referencing
 		const Node* ref;
 	public:
+		friend class LinkedList;
+		friend class iterator;
+		
+		// type definitions
 		typedef T value_type;
 		typedef T& reference;
 		typedef T* pointer;
@@ -59,13 +68,118 @@ public:
 		inline const_iterator& operator=(const const_iterator& it) { this->ref = it.ref; return *this; }
 		inline const_iterator& operator++() { this->ref = this->ref->next; return *this; }
 		inline const_iterator operator++(int) { const_iterator it(*this); this->ref = this->ref->next; return it; }
-		inline typename reference operator*() const { return this->ref->next->data; }
-		inline typename pointer operator->() const { return this->ref->next; }
+		inline typename LinkedList<T>::const_iterator::reference operator*() const { return this->ref->next->data; }
+		inline typename LinkedList<T>::const_iterator::pointer operator->() const { return this->ref->next; }
 		inline bool operator==(const const_iterator& it) const { return this->ref == it.ref; }
 		inline bool operator!=(const const_iterator& it) const { return this->ref != it.ref; }
+	};
+
+	// default constructor
+	LinkedList(): tail(new Node(T())) { tail->next = tail; }
+
+	// construct from linked list
+	LinkedList(const LinkedList& list): tail(new Node(T())) {
+		tail->next = tail;
+		for(const_iterator it = list.begin(); it != list.end(); ++it) {
+			push_front(*it);
+		}
+		reverse();
 	}
 
-	LinkedList()
-}
+	// reverse the linked list (end->beginning; beginning->end)
+	void reverse() {
+		// if list has no nodes terminate early
+		if (empty()) { return; }
+
+		Node* new_tail = tail->next->next; // copy of first node
+		Node* i = tail->next; // copy of sentinal node
+		Node* p = tail; // copy of last node
+		Node* n; // empty node
+
+		// 	avoid out of bounds by doing one cycle before\
+			terminal condition check
+		do {
+			n = i->next;
+			i->next = p;
+			p = i;
+			i = n;
+		} while (p != tail);
+		tail = new_tail;
+	}
+
+	// swap contents with another list (really just exchange tail pointers)
+	void swap(LinkedList& L) {
+		Node* temp = tail;
+		this->tail = L.tail;
+		L.tail = temp;
+	}
+
+	// assign contents
+	LinkedList& operator=(const LinkedList& L) {
+		LinkedList temp(L);
+		swap(temp);
+		return *this;
+	}
+
+	// deallocate memory
+	~LinkedList() { clear(); delete tail; }
+
+	// remove all nodes from list
+	void clear() { while(!empty()) pop_front(); }
+
+	// insert node at front
+	inline void push_front(const T& x) {
+		insert(begin(), x);
+	}
+	// insert node at end
+	inline void push_back(const T& x) {
+		insert(end(), x);
+	}
+	// remove the first node
+	inline void pop_front() {
+		erase(begin());
+	}
+	// check if list is empty
+	inline bool empty() { return tail == tail->next; }
+
+	// get node at front or back
+	inline T& front() { return *begin(); }
+	inline const T& front() const { return *begin(); }
+	inline T& back() { return *end(); }
+	inline const T& back() const { return *end(); }
+
+	// move iterator to beginning or end
+	inline iterator begin() { return iterator(tail->next); }
+	inline iterator end() { return iterator(tail); }
+	// move constant iterator to beginning or end
+	inline const_iterator begin() const { return const_iterator(tail->next); }
+	inline const_iterator end() const { return const_iterator(tail); }
+
+	// erase node at iterator(it)
+	void erase(iterator it) {
+		if (it==end()) return;
+		if (it.ref->next == tail) tail = it.ref;
+		Node* temp = it.ref->next;
+		it.ref->next = it.ref->next->next;
+		delete temp;
+	}
+
+	// insert node at iterator(it) with data(d)
+	void insert(iterator it, const T& d) {
+		Node* temp = new Node(d, it.ref->next);
+		if (it.ref == tail) tail = temp;
+		it.ref->next = temp;
+	}
+
+	// rotate iterator to beginning
+	void rotate (iterator it) {
+		if (it == end()) return;
+		Node* sent = tail->next;
+		tail->next = tail->next->next;
+		sent->next = it.ref->next;
+		it.ref->next = sent;
+		tail = it.ref;
+	}
+};
 
 #endif
