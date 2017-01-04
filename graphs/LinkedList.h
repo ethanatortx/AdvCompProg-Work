@@ -5,7 +5,7 @@
 
 // circular linked list
 template <class T>
-class LinkedList {
+class List {
 	// node structure
 	struct Node {
 		Node(T x, Node* y = 0): data(x), next(y) {}
@@ -24,7 +24,7 @@ public:
 		// node this iterator is referencing
 		Node* ref;
 	public:
-		friend class LinkedList;
+		friend class List;
 		friend class const_iterator;
 
 		// type definitions
@@ -39,8 +39,8 @@ public:
 		inline iterator& operator=(const iterator& it) { this->ref = it.ref; return *this; }
 		inline iterator& operator++() { this->ref = this->ref->next; return *this; }
 		inline iterator operator++(int) { iterator it(*this); this->ref = this->ref->next; return it; }
-		inline typename LinkedList<T>::iterator::reference operator*() const { return this->ref->next->data; }
-		inline typename LinkedList<T>::iterator::pointer operator->() const { return this->ref->next; }
+		inline typename List<T>::iterator::reference operator*() const { return this->ref->next->data; }
+		inline typename List<T>::iterator::pointer operator->() const { return this->ref->next; }
 		inline bool operator==(const iterator& x) const { return this->ref == x.ref; }
 		inline bool operator!=(const iterator& x) const { return this->ref != x.ref; }
 	};
@@ -51,7 +51,7 @@ public:
 		// node this iterator is referencing
 		const Node* ref;
 	public:
-		friend class LinkedList;
+		friend class List;
 		friend class iterator;
 		
 		// type definitions
@@ -68,19 +68,19 @@ public:
 		inline const_iterator& operator=(const const_iterator& it) { this->ref = it.ref; return *this; }
 		inline const_iterator& operator++() { this->ref = this->ref->next; return *this; }
 		inline const_iterator operator++(int) { const_iterator it(*this); this->ref = this->ref->next; return it; }
-		inline typename LinkedList<T>::const_iterator::reference operator*() const { return this->ref->next->data; }
-		inline typename LinkedList<T>::const_iterator::pointer operator->() const { return this->ref->next; }
+		inline typename List<T>::const_iterator::reference operator*() const { return this->ref->next->data; }
+		inline typename List<T>::const_iterator::pointer operator->() const { return this->ref->next; }
 		inline bool operator==(const const_iterator& it) const { return this->ref == it.ref; }
 		inline bool operator!=(const const_iterator& it) const { return this->ref != it.ref; }
 	};
 
 	// default constructor
-	LinkedList(): tail(new Node(T())) { tail->next = tail; }
+	List(): tail(new Node(T())) { tail->next = tail; }
 
 	// construct from linked list
-	LinkedList(const LinkedList& list): tail(new Node(T())) {
+	List(const List& L): tail(new Node(T())) {
 		tail->next = tail;
-		for(const_iterator it = list.begin(); it != list.end(); ++it) {
+		for(const_iterator it = L.begin(); it != L.end(); ++it) {
 			push_front(*it);
 		}
 		reverse();
@@ -108,21 +108,21 @@ public:
 	}
 
 	// swap contents with another list (really just exchange tail pointers)
-	void swap(LinkedList& L) {
+	void swap(List& L) {
 		Node* temp = tail;
 		this->tail = L.tail;
 		L.tail = temp;
 	}
 
 	// assign contents
-	LinkedList& operator=(const LinkedList& L) {
-		LinkedList temp(L);
+	List& operator=(const List& L) {
+		List temp(L);
 		swap(temp);
 		return *this;
 	}
 
 	// deallocate memory
-	~LinkedList() { clear(); delete tail; }
+	~List() { clear(); delete tail; }
 
 	// remove all nodes from list
 	void clear() { while(!empty()) pop_front(); }

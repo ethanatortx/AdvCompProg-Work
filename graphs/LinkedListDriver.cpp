@@ -1,4 +1,4 @@
-// linked LinkedList driver program
+// linked list driver program
 
 #include "LinkedList.h"
 #include <algorithm>
@@ -7,17 +7,17 @@
 
 int main()
 {
-	LinkedList<int> x;
+	List<int> x;
 	x.push_front(3);
 	x.push_front(4);
 	x.push_front(9);
 	std::copy(x.begin(), x.end(), std::ostream_iterator<int>(std::cout,"\n"));
-	LinkedList<int>::iterator it = std::find(x.begin(),x.end(),4);
+	List<int>::iterator it = std::find(x.begin(),x.end(),4);
 	if (it != x.end())
 		std::cout << *it << std::endl;
 
 	x.insert (it,11);
-	std::cout << "The LinkedList is: " << std::endl;
+	std::cout << "The list is: " << std::endl;
 	std::copy(x.begin(), x.end(), std::ostream_iterator<int>(std::cout,"\n"));
 
 	int sum = std::accumulate ( x.begin(),x.end(),0);
@@ -27,7 +27,7 @@ int main()
 	std::cout << "sum sq " << sumsq << std::endl;
 
 
-	LinkedList<int> y = x;
+	List<int> y = x;
 	std::cout << "Copying... " << std::endl;
 	std::copy(y.begin(), y.end(), std::ostream_iterator<int>(std::cout,"\n"));
 
