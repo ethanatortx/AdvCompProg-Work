@@ -8,19 +8,25 @@
 template <class T>
 class digraph_list {
 
-	struct Vertex {
-		// pair of one vertex to another
-		typedef std::pair<Vertex*, Vertex*> edge;
+	struct Vertex;
 
-		// constructor for Vertex
-		Vertex(T&& x, const List<edge> y): data(x), adj(y) {}
+	// pair of one vertex to another
+	typedef std::pair<Vertex*, Vertex*> edge;
+	typedef std::string hash;
+	typedef List<edge> adjacent;
+	typedef std::pair<T, adjacent> vertex;
+	typedef std::unordered_map<hash, vertex> vert_umap;
 
-		T data; // data of this vertex
-		List<edge> adj; // nodes adjacent to this node
-	}
+	// unordered map of hashes-corresponding unhashed vertices
+	vert_umap digraph;
 
-	typedef std::pair<std::string, Vertex*> hash;
-	typedef std::set<hash> graph;
+public:
+
+	digraph_list();
+	digraph_list(const digraph_list&);
+	digraph_list(digraph_list&&);
+
+	iterator emplace(T data, )
 };
 
 template <class T>
