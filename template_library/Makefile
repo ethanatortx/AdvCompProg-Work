@@ -1,16 +1,12 @@
-
 CC = g++
-CFLAGS = -std=c++11 -g -Wall
-CL /I\template_library\hash\ /I\template_library\circular_list\
+SRC_DIR = directed_graph
+INC_DIR = Util
+CFLAGS = -std=c++11 -I$(INC_DIR)
 
-default: all
+SRCS = $(SRC_DIR)\directed_graph.cpp $(SRC_DIR)\directed_graph_driver.cpp $(SRC_DIR)\directed_graph.h
 
-all: directed_graph.o
-	$(CC) $(CFLAGS) -o all directed_graph.o
-
-directed_graph.o: directed_graph\directed_graph.cpp\ directed_graph\directed_graph.h\
-	$(CC) $(CFLAGS) -c directed_graph\directed_graph.cpp\
+directed_graph.o: $(SRCS)
+	$(CC) $(CFLAGS) $(SRCS) -o directed_graph.o
 
 clean:
-	$(RM) all *.o *~
-
+	rd /S /Q "C:\Users\Ethan Rivers\Documents\AdvCompProg-Work\template-library\directed_graph.o"

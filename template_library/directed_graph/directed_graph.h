@@ -2,7 +2,6 @@
 #define __DIRECTED_GRAPH_H_INCLUDED__
 
 #include "circular_list.h"
-#include "hash.h"
 #include <functional>
 #include <utility>
 
