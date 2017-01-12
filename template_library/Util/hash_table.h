@@ -17,4 +17,6 @@
 	dec convert: 1638034
 */
 
+class hash_table
+
 #endif

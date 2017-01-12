@@ -9,4 +9,4 @@ directed_graph.o: $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o directed_graph.o
 
 clean:
-	rd /S /Q "C:\Users\Ethan Rivers\Documents\AdvCompProg-Work\template-library\directed_graph.o"
+	Del "C:\Users\Ethan Rivers\Documents\AdvCompProg-Work\template_library\directed_graph.o"
