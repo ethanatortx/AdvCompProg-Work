@@ -1,5 +1,5 @@
-#ifndef __CIRCULAR_LIST_H_INCLUDED__
-#define __CIRCULAR_LIST_H_INCLUDED__
+#ifndef CIRCULAR_LIST_H
+#define CIRCULAR_LIST_H
 
 #include <iterator>
 
