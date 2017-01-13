@@ -4,7 +4,7 @@
 #include <vector>
 #include <iterator>
 #include <functional>
-#include "..\circular_list\circular_list.h"
+#include "..\linked_list\singly_linked\singly_linked_list.h"
 
 
 
@@ -56,6 +56,40 @@ public:
 template <class T,
 		  class Hash>
 class hash_table<T, Hash>::hash_node {
+
+public:
+
+};
+
+template <class T,
+		  class Hash>
+class hash_table<T, Hash>::iterator: 
+	virtual public std::iterator
+	<	std::random_access_iterator_tag,
+		typename hash_table<T, Hash>::bucket	>
+{
+
+	friend class hash_table;
+	friend class const_iterator;
+
+	typename bucket b_ref;
+
+public:
+	iterator(const typename bucket& B): b_ref(B) {}
+	iterator(const iterator& I): b_ref(I.b_ref) {}
+
+	inline iterator& operator=(const iterator& it) { this->b_ref = it->b_ref; return *this; }
+
+	virtual ~iterator();
+};
+
+template <class T,
+		  class Hash>
+class hash_table<T, Hash>::const_iterator: 
+	virtual public std::iterator
+	<	std::random_access_iterator_tag,				// iterator_category
+		const typename hash_table<T, Hash>::bucket 	>	// value_type
+{
 
 public:
 

@@ -2,6 +2,7 @@
 #define __CIRCULAR_LIST_H_INCLUDED__
 
 #include <iterator>
+#include "..\linked_list.h"
 
 // circular linked list
 template <class T>
