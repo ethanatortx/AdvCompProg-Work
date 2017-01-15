@@ -12,18 +12,18 @@ class linked_list {
 	Node *head;
 
 public:
-	linked_list(): head(0);
-	linked_list(const linked_list<T>&): head(0);
+	linked_list(): head(0) {}
+	linked_list(const linked_list<T>&): head(0) {}
 
 	class iterator;
 	class const_iterator;
 
 	iterator begin();
-	const_iterator begin();
+	const const_iterator begin() const;
 	const_iterator cbegin();
 
 	iterator end();
-	const_iterator end();
+	const const_iterator end() const;
 	const_iterator cend();
 
 	bool empty() const;

@@ -1,39 +1,33 @@
 
 #include "..\linked_list.h"
 
-
 template <class T>
-linked_list<T>::linked_list(const linked_list<T>& List) {
+typename linked_list<T>::iterator linked_list<T>::begin() {
 
 }
 
 template <class T>
-linked_list<T>::iterator linked_list<T>::begin() {
+const typename linked_list<T>::const_iterator linked_list<T>::begin() const{
 
 }
 
 template <class T>
-linked_list<T>::const_iterator linked_list<T>::begin() {
+typename linked_list<T>::const_iterator linked_list<T>::cbegin() {
 
 }
 
 template <class T>
-linked_list<T>::const_iterator linked_list<T>::cbegin() {
+typename linked_list<T>::iterator linked_list<T>::end() {
 
 }
 
 template <class T>
-linked_list<T>::iterator linked_list<T>::end() {
+const typename linked_list<T>::const_iterator linked_list<T>::end() const {
 
 }
 
 template <class T>
-linked_list<T>::const_iterator linked_list<T>::end() {
-
-}
-
-template <class T>
-linked_list<T>::const_iterator linked_list<T>::cend() {
+typename linked_list<T>::const_iterator linked_list<T>::cend() {
 
 }
 
