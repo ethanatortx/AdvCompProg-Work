@@ -18,6 +18,14 @@ public:
 	class iterator;
 	class const_iterator;
 
+	iterator begin();
+	const_iterator begin();
+	const_iterator cbegin();
+
+	iterator end();
+	const_iterator end();
+	const_iterator cend();
+
 	bool empty() const;
 
 	void clear();
@@ -25,9 +33,9 @@ public:
 	void push_back(const T&);
 	void push_back(T&&);
 
-	void insert(const int&);
-	void insert(const iterator&);
-	void insert(const const_iterator&);
+	void insert(const T&, const int);
+	void insert(const T&, const iterator&);
+	void insert(const T&, const const_iterator&);
 
 	void pop();
 
