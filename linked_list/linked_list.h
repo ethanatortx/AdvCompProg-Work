@@ -1,13 +1,20 @@
-#ifndef LINKED_LIST_H
-#define LINKED_LIST_H
+#ifndef __LINKED_LIST_H__
+#define __LINKED_LIST_H__
 
 #include <exception>
 #include <iterator>
+#include <iostream>
 
 template <class T>
 class linked_list {
 
-	struct Node;
+	struct Node {
+
+		Node(const T& x, const Node* y = 0): data(x), next(y) {}
+
+		T data;
+		Node* next;
+	};
 
 	Node *head;
 
@@ -18,32 +25,34 @@ public:
 	class iterator;
 	class const_iterator;
 
-	iterator begin();
-	const const_iterator begin() const;
-	const_iterator cbegin();
+	T at(int) const;
+	T operator[](int) const;
+
+	inline iterator begin() { linked_list<T>::iterator* I = new linked_list<T>::iterator(head); return *I; }
+	inline const_iterator begin() const { linked_list<T>::iterator* I = new linked_list<T>::const_iterator(head); return *I; }
+	inline const_iterator cbegin() const { linked_list<T>::const_iterator* I = new linked_list<T>::const_iterator(head); return *I; }
 
 	iterator end();
-	const const_iterator end() const;
-	const_iterator cend();
+	const_iterator end() const;
+	const_iterator cend() const;
 
-	bool empty() const;
-
-	void clear();
+	inline bool empty() const { return (head == NULL); }
 
 	void push_back(const T&);
 	void push_back(T&&);
 
-	void insert(const T&, const int);
-	void insert(const T&, const iterator&);
-	void insert(const T&, const const_iterator&);
-
 	void pop();
 
-	void erase(const iterator&);
-	void erase(const const_iterator&);
+	void clear();
 
-	void erase_range(const iterator&, const iterator&);
-	void erase_range(const const_iterator&, const const_iterator&);
+	void insert(const T&, int);
+	void insert(const T&, const iterator&);
+
+	void erase(int);
+	void erase(const iterator&);
+
+	void erase_range(iterator, const iterator);
+	void erase_range(iterator, const_iterator);
 
 	linked_list<T>& operator=(const linked_list<T>&) const;
 	linked_list<T>& operator=(linked_list<T>&&) const;
@@ -53,22 +62,18 @@ public:
 
 	linked_list<T>& swap(linked_list<T>&);
 
+	void print();
+
+	~linked_list();
+
 };
 
-template <class T>
-struct linked_list<T>::Node {
 
-	Node(const T& x, const Node* y = 0): data(x), next(y) {}
-
-	T data;
-	Node* next;
-};
 
 template <class T>
 class linked_list<T>::iterator:
 	public std::iterator<std::forward_iterator_tag, T>
 {
-
 	Node* n_ref;
 
 public:
@@ -82,7 +87,7 @@ public:
 	typedef int difference_type;
 	typedef std::forward_iterator_tag iterator_category;
 
-	iterator(const Node* x = 0): n_ref(x.n_ref) {}
+	iterator(Node* x = 0): n_ref(x) {}
 	iterator(const iterator& x): n_ref(x.n_ref) {}
 
 	inline iterator& operator=(const iterator& I) { this->n_ref = I.n_ref; return *this; }
@@ -96,7 +101,9 @@ public:
 	inline bool operator==(const iterator& I) const { return this->n_ref == I.n_ref; }
 	inline bool operator!=(const iterator& I) const { return this->n_ref != I.n_ref; }
 
-	~iterator();
+	inline iterator& swap(iterator& it) { iterator old(it); it.n_ref = this->n_ref; this->n_ref = old->n_ref; }
+
+	~iterator() { delete n_ref; }
 
 };
 
@@ -134,7 +141,7 @@ public:
 	inline bool operator==(const const_iterator& I) const { return this->n_ref == I.n_ref; }
 	inline bool operator!=(const const_iterator& I) const { return this->n_ref != I.n_ref; }
 
-	~const_iterator();
+	inline const_iterator& swap(const_iterator& it) { iterator old(it); it.n_ref = this->n_ref; this->n_ref = old->n_ref; }
 };
 
 #endif
