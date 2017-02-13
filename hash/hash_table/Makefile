@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -I..\..\circular_list
+CFLAGS = -std=c++11 -I..\..\linked_list
 
 SRCS = ..\hash.h hash_table.cpp hash_node.cpp iterator.cpp const_iterator.cpp ..\driver\hash_table_driver.cpp
 

@@ -1,12 +1,12 @@
-#ifndef __CIRCULAR_LIST_H_INCLUDED__
-#define __CIRCULAR_LIST_H_INCLUDED__
+#ifndef CIRCULAR_LIST_H_INCLUDED
+#define CIRCULAR_LIST_H_INCLUDED
 
 #include <iterator>
 #include "..\linked_list.h"
 
-// circular linked list
+// circular linked circular_list
 template <class T>
-class List {
+class circular_list: public linked_list<T> {
 	// node structure
 	struct Node {
 		Node(T x, Node* y = 0): data(x), next(y) {}
@@ -15,7 +15,7 @@ class List {
 		// node in next position
 		Node* next;
 	};
-	// node at tail end of list
+	// node at tail end of circular_list
 	Node* tail;
 
 public:
@@ -25,7 +25,7 @@ public:
 		// node this iterator is referencing
 		Node* ref;
 	public:
-		friend class List;
+		friend class circular_list;
 		friend class const_iterator;
 
 		// type definitions
@@ -40,8 +40,8 @@ public:
 		inline iterator& operator=(const iterator& it) { this->ref = it.ref; return *this; }
 		inline iterator& operator++() { this->ref = this->ref->next; return *this; }
 		inline iterator operator++(int) { iterator it(*this); this->ref = this->ref->next; return it; }
-		inline typename List<T>::iterator::reference operator*() const { return this->ref->next->data; }
-		inline typename List<T>::iterator::pointer operator->() const { return this->ref->next; }
+		inline typename circular_list<T>::iterator::reference operator*() const { return this->ref->next->data; }
+		inline typename circular_list<T>::iterator::pointer operator->() const { return this->ref->next; }
 		inline bool operator==(const iterator& x) const { return this->ref == x.ref; }
 		inline bool operator!=(const iterator& x) const { return this->ref != x.ref; }
 	};
@@ -52,7 +52,7 @@ public:
 		// node this iterator is referencing
 		const Node* ref;
 	public:
-		friend class List;
+		friend class circular_list;
 		friend class iterator;
 		
 		// type definitions
@@ -69,17 +69,17 @@ public:
 		inline const_iterator& operator=(const const_iterator& it) { this->ref = it.ref; return *this; }
 		inline const_iterator& operator++() { this->ref = this->ref->next; return *this; }
 		inline const_iterator operator++(int) { const_iterator it(*this); this->ref = this->ref->next; return it; }
-		inline typename List<T>::const_iterator::reference operator*() const { return this->ref->next->data; }
-		inline typename List<T>::const_iterator::pointer operator->() const { return this->ref->next; }
+		inline typename circular_list<T>::const_iterator::reference operator*() const { return this->ref->next->data; }
+		inline typename circular_list<T>::const_iterator::pointer operator->() const { return this->ref->next; }
 		inline bool operator==(const const_iterator& it) const { return this->ref == it.ref; }
 		inline bool operator!=(const const_iterator& it) const { return this->ref != it.ref; }
 	};
 
 	// default constructor
-	List(): tail(new Node(T())) { tail->next = tail; }
+	circular_list(): tail(new Node(T())) { tail->next = tail; }
 
-	// construct from linked list
-	List(const List& L): tail(new Node(T())) {
+	// construct from linked circular_list
+	circular_list(const circular_list& L): tail(new Node(T())) {
 		tail->next = tail;
 		for(const_iterator it = L.begin(); it != L.end(); ++it) {
 			push_front(*it);
@@ -87,9 +87,9 @@ public:
 		reverse();
 	}
 
-	// reverse the linked list (end->beginning; beginning->end)
+	// reverse the linked circular_list (end->beginning; beginning->end)
 	void reverse() {
-		// if list has no nodes terminate early
+		// if circular_list has no nodes terminate early
 		if (empty()) { return; }
 
 		Node* new_tail = tail->next->next; // copy of first node
@@ -108,24 +108,24 @@ public:
 		tail = new_tail;
 	}
 
-	// swap contents with another list (really just exchange tail pointers)
-	void swap(List& L) {
+	// swap contents with another circular_list (really just exchange tail pointers)
+	void swap(circular_list& L) {
 		Node* temp = tail;
 		this->tail = L.tail;
 		L.tail = temp;
 	}
 
 	// assign contents
-	List& operator=(const List& L) {
-		List temp(L);
+	circular_list& operator=(const circular_list& L) {
+		circular_list temp(L);
 		swap(temp);
 		return *this;
 	}
 
 	// deallocate memory
-	~List() { clear(); delete tail; }
+	~circular_list() { clear(); delete tail; }
 
-	// remove all nodes from list
+	// remove all nodes from circular_list
 	void clear() { while(!empty()) pop_front(); }
 
 	// insert node at front
@@ -140,7 +140,7 @@ public:
 	inline void pop_front() {
 		erase(begin());
 	}
-	// check if list is empty
+	// check if circular_list is empty
 	inline bool empty() { return tail == tail->next; }
 
 	// get node at front or back

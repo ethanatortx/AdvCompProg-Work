@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -std=c++11
 
-SRCS = ..\linked_list.h linked_list.cpp linked_list_driver.cpp
+SRCS = linked_list.cpp linked_list_driver.cpp
 
 linked_list.o: $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o linked_list.o
